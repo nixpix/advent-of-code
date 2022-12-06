@@ -11,13 +11,13 @@ function performMoveWithCrateMover9000(amount, stacks, sourceStack, targetStack)
 function performMoveWithCrateMover9001(amount, stacks, sourceStack, targetStack) {
   let start = stacks[sourceStack].length - amount;
   let end = stacks[sourceStack].length;
-  
+
   let elements = stacks[sourceStack].splice(start, end);
-  
-  elements.forEach((el) => {
+
+  elements.forEach((el) => {
     stacks[targetStack].push(el);
-  })
-  
+  });
+
   return stacks;
 }
 
@@ -48,7 +48,11 @@ function main() {
   numOfStacks = lastRow[lastRow.length - 1];
   cleanedStacks = [];
   for (let i = stacks.length - 2; i >= 0; i--) {
-    // console.log(stacks[i]);
+    /* 
+      this can be done better by using regex, something like     
+      cleanedStacks.push(stacks[i].match(/\[(.*?)\]/g))
+      the problem is the handling of the empty spaces
+    */
     stacks[i] = stacks[i] + " ";
     stackRow = stacks[i].match(/.{1,4}/g);
     for (let j = 0; j < stackRow.length; j++) {
@@ -82,20 +86,19 @@ function main() {
     tempRow.splice(2, 1);
     cleanedMoves.push(tempRow);
   }
-  const crane = '9001';
-  
+  const crane = "9001";
+
   for (let i = 0; i < cleanedMoves.length; i++) {
     console.log(`Move ${cleanedMoves[i][0]} from ${cleanedMoves[i][1]} to ${cleanedMoves[i][2]}`);
-    if (crane === '9000') {
+    if (crane === "9000") {
       orderedStack = performMoveWithCrateMover9000(cleanedMoves[i][0], orderedStack, cleanedMoves[i][1] - 1, cleanedMoves[i][2] - 1);
-    } else if( crane === '9001') {
+    } else if (crane === "9001") {
       orderedStack = performMoveWithCrateMover9001(cleanedMoves[i][0], orderedStack, cleanedMoves[i][1] - 1, cleanedMoves[i][2] - 1);
     }
-    
   }
   console.log("--------------------------\nFinal Stacks:");
   console.log(orderedStack);
-  console.log(`Crates on top of each Stack with ${crane}: ${findTopOfEachStack(orderedStack)}`)
+  console.log(`Crates on top of each Stack with ${crane}: ${findTopOfEachStack(orderedStack)}`);
 }
 
 main();
